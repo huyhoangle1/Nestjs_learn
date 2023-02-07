@@ -5,6 +5,7 @@ import { PostModule } from './post/post.module';
 import { ConfigModule } from '@nestjs/config';
 import { Mongoose } from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [PostModule, 
@@ -13,7 +14,8 @@ import { MongooseModule } from '@nestjs/mongoose';
               useNewUrlParser: true,
               useFindAndModify: false,
               useCreateIndex: true,
-            })
+            }),
+            UserModule
   ],
   controllers: [AppController],
   providers: [AppService],
