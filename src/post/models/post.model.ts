@@ -6,6 +6,10 @@ const PostSchema = new Schema(
     description: String,
     content: String,
     // created_at: { type: Date, required: true, default: Date.now },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref:"user"
+    }
   },
   {
     timestamps: true,
