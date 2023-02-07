@@ -1,17 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Put, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Post, Query, UseFilters } from '@nestjs/common';
 import { CreatePostDto, UpdatePostDto } from '../dto/post.dto';
 import { PostService } from '../service/post.service';
+import { HttpExceptionFilter } from '../../utils/httpException.filter';
 
 @Controller('post')
 export class PostController {
     constructor(private readonly postService: PostService){}
 
     @Get()
+    @UseFilters(HttpExceptionFilter)
+    // @UseFilters(ExceptionLoggerFilter)
     getAllPost() {
         return this.postService.getAllPosts();
     }
 
     @Get(':id')
+    // @UseFilters(HttpExceptionFilter)
     getPostById(@Param('id') id: string) {
         return this.postService.getPostById(id);
     }

@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { Mongoose } from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
+import { ExceptionLoggerFilter } from './utils/exceptionLogger.filter';
+import { APP_FILTER } from '@nestjs/core';
 
 @Module({
   imports: [PostModule, 
@@ -18,6 +20,10 @@ import { UserModule } from './user/user.module';
             UserModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    // {
+    //   provide: APP_FILTER, useClass: ExceptionLoggerFilter,
+    // }
+],
 })
 export class AppModule {}

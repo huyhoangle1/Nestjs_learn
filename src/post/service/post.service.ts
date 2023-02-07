@@ -1,22 +1,28 @@
 import { PostRepository } from './../repositories/post.repository';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePostDto, UpdatePostDto } from '../dto/post.dto';
+import { UserService } from 'src/user/services/user.service';
 
 @Injectable()
 export class PostService {
 
-  constructor(private readonly PostRepository: PostRepository){}
+  constructor(private readonly PostRepository: PostRepository,
+              private readonly userService: UserService,
+    ){}
 
   async getAllPosts() {
     return this.PostRepository.getByCondition({});
   }
 
   async getPostById(post_id: string) {
-    const post = this.PostRepository.findById(post_id);
+    const post =await this.PostRepository.findById(post_id);
     if (post) {
       return post;
+    }else{
+      throw new NotFoundException(post_id);
+      // throw new PostNotFoundException(post_id);
     }
-    throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+    // throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
   }
 
   async replacePost(post_id: string, data: UpdatePostDto) {
