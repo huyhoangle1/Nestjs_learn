@@ -61,6 +61,11 @@ import {
     async getByCategory(@Query('category_id') category_id) {
       return await this.postService.getByCategory(category_id);
     }
+
+    @Get('get/array')
+    async getByArray() {
+      return this.postService.getByArray();
+    }
   
     @Get('get/categories')
     async getByCategories(@Query('category_ids') category_ids) {

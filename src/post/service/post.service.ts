@@ -42,6 +42,21 @@ export class PostService {
     return await this.postRepository.findByIdAndUpdate(post_id, data);
   }
 
+  async getByArray() {
+    return await this.postRepository.getByCondition({
+      // 'numbers.0': { $eq: 10 },
+      // numbers: { $elemMatch: { $gt: 13, $lt: 20 } },
+      // numbers: { $gt: 13, $lt: 20 }, // hơn 13 nhỏ 20
+      // $and: [{ numbers: { $gt: 13 } }, { numbers: { $lt: 20 } }],
+      // tags: 'black',
+      // tags: { $all: ['black', 'blank'] }, // tồn tại
+      // tags: ['red', 'blank'], // No
+      // tags: ['red', 'blank', 'black'], //Yes
+      // tags: { $size: 3 }, // tab nhiều hơn 2
+      tags: { $exists: false }, // kh có tab thì lấy yes ngc lại
+    });
+  }
+
   async createPost(user: User, post: CreatePostDto) {
     post.user = user._id;
     const new_post = await this.postRepository.create(post);

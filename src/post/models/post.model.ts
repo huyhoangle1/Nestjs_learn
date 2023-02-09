@@ -1,4 +1,6 @@
+import { User } from './../../user/models/user.model';
 import { Schema, Document } from 'mongoose';
+import { Category } from './category.model';
 
 const PostSchema = new Schema(
   {
@@ -9,7 +11,9 @@ const PostSchema = new Schema(
     user: {
         type: Schema.Types.ObjectId,
         ref:"user"
-    }
+    },
+    tags: [String],
+    numbers: [Number],  
   },
   {
     timestamps: true,
@@ -27,4 +31,8 @@ export interface Post extends Document {
   title: string;
   description: string;
   content: string;
+  user: User;
+  tags: [String],
+  numbers: [Number],
+  categories: [Category];
 }
