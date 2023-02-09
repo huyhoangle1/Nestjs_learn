@@ -45,6 +45,12 @@ export class UserService {
     });
   }
 
+  async findById(id) {
+    return await this.userRepository.findByCondition({
+      id: id,
+    });
+  }
+
   async update(filter, update) {
     if (update.refreshToken) {
       update.refreshToken = await bcrypt.hash(

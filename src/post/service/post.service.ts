@@ -1,6 +1,4 @@
 import {
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -25,10 +23,31 @@ export class PostService {
 
   async getPostById(post_id: string) {
     const post = await this.postRepository.findById(post_id);
+    const id = await this.userService.findById(post_id)
+
+    if(!id){
+      throw new NotFoundException(post_id);
+    }
 
     if (post) {
       await post
-        .populate({ path: 'user', select: 'name email' })
+        // .populate({ path: 'user', select: '-password -refreshToken' })
+        // .populate({ path: 'user', select: 'name email' })
+        // .populate('categories')
+        .populate([
+          { path: 'user', select: 'name email -password' }, // lấy name email trừ password
+          {
+            path: 'categories',
+            match: {
+              _id: '62fd1a9473adb27682f0f440',
+            },
+            select: 'title',
+            options: { limit: 100, sort: { name: 1 } },
+            // populate: [{
+            //   path: '',
+            // },]
+          },
+        ])
         .execPopulate();
       return post;
     } else {

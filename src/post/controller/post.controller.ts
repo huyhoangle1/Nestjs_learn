@@ -27,7 +27,7 @@ import {
     }
   
     @Get(':id')
-    @UseFilters(HttpExceptionFilter)
+    // @UseFilters(HttpExceptionFilter) time
     // @UseFilters(ExceptionLoggerFilter)
     getPostById(@Param('id') id: string) {
       return this.postService.getPostById(id);
@@ -53,7 +53,12 @@ import {
     @UseGuards(AuthGuard('jwt'))
     @Get('user/all')
     async getPostUser(@Req() req: any) {
-      await req.user.populate('posts').execPopulate();
+      await req.user
+      .populate({
+        path: 'posts',
+        // select: 'title',
+      })
+      .execPopulate();
       return req.user.posts;
     }
   

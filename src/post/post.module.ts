@@ -1,7 +1,6 @@
 import { PostRepository } from './repositories/post.repository';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Mongoose, Schema } from 'mongoose';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { PostController } from './controller/post.controller';
 import { PostService } from './service/post.service';
 import { PostSchema } from './models/post.model';
@@ -10,20 +9,25 @@ import { CategoryController } from './controller/category.controller';
 import { CategorySchema } from './models/category.model';
 import { CategoryRepository } from './repositories/category.repository';
 import { CategoryService } from './service/category.service';
+import { UserSchema } from 'src/user/models/user.model';
 
 @Module({
     imports:[
+    forwardRef(() => UserModule),
     MongooseModule.forFeature([
       {
-            name: 'Post',
-            schema: PostSchema,
+        name: 'Post',
+        schema: PostSchema,
       },
       {
         name: 'Category',
         schema: CategorySchema,
       },
+      {
+        name: 'User',
+        schema: UserSchema,
+      },
   ]),
-  UserModule,
   ],
   controllers: [PostController, CategoryController],
   providers: [PostService, PostRepository, CategoryRepository, CategoryService]

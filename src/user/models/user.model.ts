@@ -17,6 +17,9 @@ UserSchema.virtual('posts', {
   localField: '_id',
   foreignField: 'user',
   justOne: false,
+    match: {
+    categories: { $size: 2 },
+  },
 });
 
 export { UserSchema };

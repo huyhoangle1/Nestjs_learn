@@ -1,4 +1,6 @@
-import { Global, Module } from '@nestjs/common';
+import { PostModule } from './../post/post.module';
+import { PostService } from './../post/service/post.service';
+import { Global, Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './models/user.model';
 import { PassportModule } from '@nestjs/passport';
@@ -14,6 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Global()
 @Module({
   imports: [
+    forwardRef(() => PostModule),
     MongooseModule.forFeature([
       {
         name: 'User',
@@ -34,7 +37,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         },
       }),
       inject: [ConfigService],
-    }),
+    })
   ],
   controllers: [AuthController, UserController],
   providers: [UserService, AuthService, UserRepository, JwtStrategy],
