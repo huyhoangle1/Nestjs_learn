@@ -10,10 +10,14 @@ import { CategorySchema } from './models/category.model';
 import { CategoryRepository } from './repositories/category.repository';
 import { CategoryService } from './service/category.service';
 import { UserSchema } from 'src/user/models/user.model';
+import { CreatePostHandler } from './handler/createPost.handler';
+import { GetPostHandler } from './handler/getPost.handler';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
     imports:[
     forwardRef(() => UserModule),
+    forwardRef(() => CqrsModule),
     MongooseModule.forFeature([
       {
         name: 'Post',
@@ -30,6 +34,13 @@ import { UserSchema } from 'src/user/models/user.model';
   ]),
   ],
   controllers: [PostController, CategoryController],
-  providers: [PostService, PostRepository, CategoryRepository, CategoryService]
+  providers: [    
+    PostService,
+    PostRepository,
+    CategoryRepository,
+    CategoryService,
+    CreatePostHandler,
+    GetPostHandler,
+  ]
 })
 export class PostModule {}
