@@ -1,3 +1,4 @@
+import { MediaModule } from './media/media.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,6 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { ExceptionLoggerFilter } from './utils/exceptionLogger.filter';
 import { APP_FILTER } from '@nestjs/core';
+import { SubscriberModule } from './subscriber/subscriber.module';
 
 @Module({
   imports: [PostModule, 
@@ -17,7 +19,9 @@ import { APP_FILTER } from '@nestjs/core';
               useFindAndModify: false,
               useCreateIndex: true,
             }),
-            UserModule
+            UserModule,
+            MediaModule,
+            SubscriberModule,
   ],
   controllers: [AppController],
   providers: [AppService,
