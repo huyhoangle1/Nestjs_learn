@@ -1,23 +1,22 @@
-import { PostRepository } from './repositories/post.repository';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Module, forwardRef } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { PostController } from './controller/post.controller';
 import { PostService } from './service/post.service';
+import { MongooseModule } from '@nestjs/mongoose';
 import { PostSchema } from './models/post.model';
-import { UserModule } from 'src/user/user.module';
-import { CategoryController } from './controller/category.controller';
+import { PostRepository } from './repositories/post.repository';
+import { UserModule } from '../user/user.module';
 import { CategorySchema } from './models/category.model';
+import { CategoryController } from './controller/category.controller';
 import { CategoryRepository } from './repositories/category.repository';
 import { CategoryService } from './service/category.service';
-import { UserSchema } from 'src/user/models/user.model';
+import { CqrsModule } from '@nestjs/cqrs';
 import { CreatePostHandler } from './handler/createPost.handler';
 import { GetPostHandler } from './handler/getPost.handler';
-import { CqrsModule } from '@nestjs/cqrs';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
-    imports:[
-    forwardRef(() => UserModule),
-    forwardRef(() => CqrsModule),
+  imports: [
     MongooseModule.forFeature([
       {
         name: 'Post',
@@ -27,20 +26,33 @@ import { CqrsModule } from '@nestjs/cqrs';
         name: 'Category',
         schema: CategorySchema,
       },
-      {
-        name: 'User',
-        schema: UserSchema,
-      },
-  ]),
+    ]),
+    UserModule,
+    CqrsModule,
+    // CacheModule.register({
+    //   ttl: 10,
+    // }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        // isGlobal: true,
+        store: redisStore,
+        host: configService.get<string>('REDIS_HOST'),
+        port: configService.get<number>('REDIS_PORT'),
+        username: configService.get<string>('REDIS_USERNAME'),
+        password: configService.get<string>('REDIS_PASSWORD'),
+      }),
+    }),
   ],
   controllers: [PostController, CategoryController],
-  providers: [    
+  providers: [
     PostService,
     PostRepository,
     CategoryRepository,
     CategoryService,
     CreatePostHandler,
     GetPostHandler,
-  ]
+  ],
 })
 export class PostModule {}
