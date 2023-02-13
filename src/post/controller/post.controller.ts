@@ -59,7 +59,7 @@ export class PostController {
 
   @Get('cache/demo/set-cache')
   async demoSetCache() {
-    await this.cacheManager.set('newnet', 'hello world', { ttl: 60 * 10 });
+    await this.cacheManager.set('newnet', 'hello world', { ttl: 60 * 10 }); // 60s
     return true;
   }
 

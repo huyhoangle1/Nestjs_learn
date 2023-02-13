@@ -71,3 +71,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+## Setting Email : Security -> 2_Step Verification -> App Password -> Select App -> other -> ...(name) > generated -> copy password
