@@ -22,14 +22,14 @@ export class UserService {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
 
-    await this.mailerService.sendMail({
-      to: userDto.email,
-      subject: 'Welcome to my website',
-      template: './welcome',
-      context: {
-        name: userDto.name,
-      },
-    });
+    // await this.mailerService.sendMail({
+    //   to: userDto.email,
+    //   subject: 'Welcome to my website',
+    //   template: './welcome',
+    //   context: {
+    //     name: userDto.name,
+    //   },
+    // });
 
     return await this.userRepository.create(userDto);
   }

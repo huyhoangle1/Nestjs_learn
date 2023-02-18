@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../models/user.model';
 import { ExtractJwt } from 'passport-jwt';
 import fromAuthHeaderWithScheme = ExtractJwt.fromAuthHeaderWithScheme;
+import { load } from '@grpc/grpc-js';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
   ) {}
 
   async register(userDto: CreateUserDto) {
+    console.log('rUNNING:', userDto)
     const user = await this.userService.create(userDto);
     const token = await this._createToken(user);
     return {
