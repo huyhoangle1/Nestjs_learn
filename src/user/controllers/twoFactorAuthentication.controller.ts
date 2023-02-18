@@ -8,7 +8,7 @@ import {
     UnauthorizedException,
     UseGuards,
   } from '@nestjs/common';
-  import { TwoFactorAuthenticationService } from '../service/twoFactorAuthentication.service';
+  import { TwoFactorAuthenticationService } from '../services/twoFactorAuthentication.service';
   import { UserService } from '../services/user.service';
   import { AuthService } from '../services/auth.service';
   import { AuthGuard } from '@nestjs/passport';

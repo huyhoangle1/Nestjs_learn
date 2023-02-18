@@ -41,9 +41,8 @@ export class PostService {
 
   async getPostById(post_id: string) {
     const post = await this.postRepository.findById(post_id);
-    const id = await this.userService.findById(post_id)
 
-    if(!id){
+    if(!post){
       throw new NotFoundException(post_id);
     }
 
