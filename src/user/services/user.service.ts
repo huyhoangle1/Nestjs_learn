@@ -17,11 +17,10 @@ export class UserService {
     // check exists
     const userInDb = await this.userRepository.findByCondition({
       email: userDto.email,
-    });
+    });     
     if (userInDb) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
-
     await this.mailerService.sendMail({
       to: userDto.email,
       subject: 'Welcome to my website',
