@@ -74,3 +74,6 @@ Nest is [MIT licensed](LICENSE).
 
 
 ## Setting Email : Security -> 2_Step Verification -> App Password -> Select App -> other -> ...(name) > generated -> copy password
+
+## yarn cache clean
+## yarn add @nestjs/platform-express@latest -E
