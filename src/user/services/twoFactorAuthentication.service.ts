@@ -30,7 +30,7 @@ export class TwoFactorAuthenticationService {
     };
   }
 
-  async isTwoFactorAuthenticationCodeValid(code, user) {
+  async isTwoFactorAuthenticationCodeValid(code : any, user : any) {
     return authenticator.verify({
       token: code,
       secret: user.twoFactorAuthenticationSecret,

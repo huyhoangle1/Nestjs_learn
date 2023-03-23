@@ -41,6 +41,13 @@ import {
     async turnOnTwoFactorAuthentication(@Req() request: any) {
       await this.userService.turnOnTwoFactorAuthentication(request.user._id);
     }
+
+    @Post('turn-off')
+    @HttpCode(200)
+    @UseGuards(AuthGuard('jwt'))
+    async turnOffTwoFactorAuthentication(@Req() request: any) {
+      await this.userService.turnOffTwoFactorAuthentication(request.user._id);
+    }
   
     @Post('authenticate')
     @UseGuards(AuthGuard('jwt'))

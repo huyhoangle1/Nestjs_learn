@@ -1,6 +1,4 @@
-import { PostModule } from './../post/post.module';
-import { PostService } from './../post/service/post.service';
-import { Global, Module, forwardRef } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './models/user.model';
 import { PassportModule } from '@nestjs/passport';
@@ -12,11 +10,14 @@ import { UserRepository } from './repositories/user.repository';
 import { JwtStrategy } from './jwt.strategy';
 import { UserController } from './controllers/user.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TwoFactorAuthenticationController } from './controllers/twoFactorAuthentication.controller';
+import { TwoFactorAuthenticationService } from './services/twoFactorAuthentication.service';
+import { JwtTwoFactorStrategy } from './jwtTwoFactor.strategy';
 
-@Global()
+// @Global()
 @Module({
   imports: [
-    forwardRef(() => PostModule),
+    ConfigModule.forRoot(),
     MongooseModule.forFeature([
       {
         name: 'User',
@@ -37,10 +38,21 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         },
       }),
       inject: [ConfigService],
-    })
+    }),
   ],
-  controllers: [AuthController, UserController],
-  providers: [UserService, AuthService, UserRepository, JwtStrategy],
+  controllers: [
+    AuthController,
+    UserController,
+    TwoFactorAuthenticationController,
+  ],
+  providers: [
+    UserService,
+    AuthService,
+    UserRepository,
+    JwtStrategy,
+    TwoFactorAuthenticationService,
+    JwtTwoFactorStrategy,
+  ],
   exports: [UserService],
 })
 export class UserModule {}

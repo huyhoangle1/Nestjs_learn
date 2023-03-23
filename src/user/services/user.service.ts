@@ -84,7 +84,7 @@ export class UserService {
     return user;
   }
 
-  async setTwoFactorAuthenticationSecret(secret, user_id) {
+  async setTwoFactorAuthenticationSecret(secret: any, user_id: any) {
     return this.userRepository.findByIdAndUpdate(user_id, {
       twoFactorAuthenticationSecret: secret,
     });
@@ -93,6 +93,12 @@ export class UserService {
   async turnOnTwoFactorAuthentication(user_id: string) {
     return this.userRepository.findByIdAndUpdate(user_id, {
       isTwoFactorAuthenticationEnabled: true,
+    });
+  }
+
+  async turnOffTwoFactorAuthentication(user_id: string) {
+    return this.userRepository.findByIdAndUpdate(user_id, {
+      isTwoFactorAuthenticationEnabled: false,
     });
   }
 

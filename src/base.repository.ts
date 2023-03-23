@@ -51,11 +51,11 @@ export class BaseRepository<T extends Document> {
     return this.model.deleteMany({ _id: { $in: id } } as FilterQuery<T>);
   }
 
-  async deleteByCondition(filter) {
+  async deleteByCondition(filter : any) {
     return this.model.deleteMany(filter);
   }
 
-  async findByConditionAndUpdate(filter, update) {
+  async findByConditionAndUpdate(filter : any, update : any) {
     return this.model.findOneAndUpdate(filter as FilterQuery<T>, update);
   }
 
@@ -63,7 +63,7 @@ export class BaseRepository<T extends Document> {
     return this.model.updateMany(filter, update, option, callback);
   }
 
-  async findByIdAndUpdate(id, update) {
+  async findByIdAndUpdate(id: any, update : any) {
     return this.model.findByIdAndUpdate(id, update);
   }
 }
