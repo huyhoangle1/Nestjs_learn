@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
-import { CreateUserDto, LoginUserDto } from '../dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nest-modules/mailer';
+import { CreateUserDto, LoginUserDto } from '../dto/user.dto';
 
 @Injectable()
 export class UserService {

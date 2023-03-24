@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, LoginUserDto } from '../dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../models/user.model';
 import { ExtractJwt } from 'passport-jwt';
 import fromAuthHeaderWithScheme = ExtractJwt.fromAuthHeaderWithScheme;
 import { load } from '@grpc/grpc-js';
+import { CreateUserDto, LoginUserDto } from '../dto/user.dto';
 
 @Injectable()
 export class AuthService {
