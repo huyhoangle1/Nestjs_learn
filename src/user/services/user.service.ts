@@ -51,6 +51,12 @@ export class UserService {
     return user;
   }
 
+  async updateOne(id: any, password: any){
+      return await this.userRepository.findByConditionAndUpdate(id,{
+        password
+      })
+  }
+
   async findByEmail(email) {
     return await this.userRepository.findByCondition({
       email: email,

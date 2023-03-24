@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDto, LoginUserDto } from '../dto/user.dto';
 import { UserService } from '../services/user.service';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Controller('auth')
 export class AuthController {
@@ -48,6 +49,33 @@ export class AuthController {
       throw new HttpException('Not Verified', HttpStatus.UNAUTHORIZED);
     }
   }
+
+
+  @Post('reset-password/:id/:token')
+  async postResetPassword(
+    @Param('id') id: string,
+    @Param('token') token: string,
+    @Body('password') password: string,
+  ) {
+    const oldUser = await this.userService.findById(id);
+    if (!oldUser) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    const secret = process.env.SECRETKEY + oldUser.password;
+
+    try {
+      const verify = await this.jwtService.verify(token, {
+        secret: secret,
+      });
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await this.userService.updateOne(id, hashedPassword );
+
+      return { email: verify.email, status: 'verified' };
+    } catch (error) {
+      throw new HttpException('Something Went Wrong', HttpStatus.BAD_REQUEST);
+    }
+  }
+
 
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto) {
