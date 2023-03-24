@@ -1,21 +1,21 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../models/user.model';
 import { ExtractJwt } from 'passport-jwt';
-import fromAuthHeaderWithScheme = ExtractJwt.fromAuthHeaderWithScheme;
 import { load } from '@grpc/grpc-js';
 import { CreateUserDto, LoginUserDto } from '../dto/user.dto';
+import { MailerService } from '@nest-modules/mailer';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private mailerService: MailerService,
   ) {}
 
   async register(userDto: CreateUserDto) {
-    console.log('rUNNING:', userDto)
     const user = await this.userService.create(userDto);
     const token = await this._createToken(user);
     return {
@@ -23,6 +23,35 @@ export class AuthService {
       ...token,
     };
   }
+
+  async forgotPassword(@Body() body){
+    const email = await this.userService.findByEmail(body.email);
+    if(!email){
+      throw new HttpException('Email not found',HttpStatus.UNAUTHORIZED)
+    }
+    const secret = process.env.SECRETKEY + email.password;
+
+    const token = this.jwtService.sign({
+      email: email.email,
+      id: email._id,
+      expiresIn: '5m',
+    }, { secret }
+    );
+    const link = `http://localhost:9000/auth/reset-password/${email._id}/${token}`;
+    await this.mailerService.sendMail({
+      to: email.email,
+      subject: 'Reset Password',
+      template: './resetPassword',
+      context: {
+        name: link,
+      },
+    });
+    return {
+      token: token,
+      emailId: email._id,
+    };
+  }
+
 
   async login(loginUserDto: LoginUserDto) {
     const user = await this.userService.findByLogin(loginUserDto);

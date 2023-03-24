@@ -1,3 +1,4 @@
+import { TwoFactorAuthenticationController } from './../controllers/twoFactorAuthentication.controller';
 import { Injectable } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';
@@ -17,12 +18,13 @@ export class TwoFactorAuthenticationService {
   }
 
   async generateTwoFactorAuthenticationSecret(user: User) {
-    const secret = authenticator.generateSecret();
+    const secret = authenticator.generateSecret();  
     const otpAuthUrl = authenticator.keyuri(
       user.email,
       this.configService.get('TWO_FACTOR_AUTHENTICATION_APP_NAME'),
       secret,
     );
+   
     await this.userService.setTwoFactorAuthenticationSecret(secret, user._id);
     return {
       secret,
@@ -30,7 +32,7 @@ export class TwoFactorAuthenticationService {
     };
   }
 
-  async isTwoFactorAuthenticationCodeValid(code : any, user : any) {
+  async isTwoFactorAuthenticationCodeValid(code, user) {  
     return authenticator.verify({
       token: code,
       secret: user.twoFactorAuthenticationSecret,
