@@ -68,6 +68,7 @@ export class AuthController {
         secret: secret,
       });
       const hashedPassword = await bcrypt.hash(password, 10);
+      
       await this.userService.updateOne(id, hashedPassword );
 
       return { email: verify.email, status: 'verified' };

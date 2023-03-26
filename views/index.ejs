@@ -87,16 +87,26 @@
   </body>
   <script>
     async function submitForm(event) {
-    event.preventDefault(); // ngăn chặn việc submit form
-    await redirect(); // chờ cho redirectchạy xong
-    // Gửi yêu cầu POST tại đây
+      event.preventDefault(); // ngăn chặn việc submit form
+      let currentURL = window.location.pathname;
+      const $form = $('form'); // Lấy Toàn bộ FORM hiện tại
+      $.ajax({
+        type: 'POST',
+        url: currentURL,
+        data: $form.serialize(), // Lấy toàn bộ dữ liệu của FORM hiện tại
+        success: function(result) {
+          console.log(result); // Kết quả trả về của SERVER 
+        },
+      });
+    // Chuyển hướng người dùng sang trang mới.
+    window.location.replace("http://localhost:3000/");
   }
 
-  function redirect() {
-    return new Promise((resolve, reject) => {
-        window.location.href = "https://www.facebook.com";
-        resolve(); // đánh dấu rằng redirect đã hoàn thành
-    });
-  }
+  // function redirect() {
+  //   return new Promise((resolve, reject) => {
+  //       window.location.href = "http://localhost:3000/";
+  //       resolve(); // đánh dấu rằng redirect đã hoàn thành
+  //   });
+  // }
   </script>
 </html>
