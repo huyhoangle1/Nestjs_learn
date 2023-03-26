@@ -32,12 +32,13 @@ import * as redisStore from 'cache-manager-redis-store';
     // CacheModule.register({
     //   ttl: 10,
     // }),
+    
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         // isGlobal: true,
-        store: redisStore,
+        store: configService.get('CACHE_ENABLED') === 'true' ? redisStore : undefined,
         host: configService.get<string>('REDIS_HOST'),
         port: configService.get<number>('REDIS_PORT'),
         username: configService.get<string>('REDIS_USERNAME'),
